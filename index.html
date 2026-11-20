@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>moha ✓</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --glow-1: #ff2a85;
+            --glow-2: #00f0ff;
+            --accent: #ff2a85;
+            --accent-secondary: #00f0ff;
+            --glass-bg: rgba(16, 16, 24, 0.52);
+            --glass-elevated: rgba(24, 24, 36, 0.68);
+            --glass-blur: 22px;
+            --glow-opacity: 0.42;
+            --border-glow: rgba(255, 42, 133, 0.38);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #050508;
+            color: #f8fafc;
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* GPU-Accelerated Ambient Lighting Orbs */
+        .ambient-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle at 50% 0%, rgba(20, 20, 32, 0.8) 0%, #050508 75%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(85px);
+            opacity: var(--glow-opacity);
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            transition: background 0.6s ease, opacity 0.4s ease;
+        }
+
+        .orb-1 {
+            width: 340px;
+            height: 340px;
+            top: -8%;
+            right: -5%;
+            background: radial-gradient(circle, var(--glow-1) 0%, transparent 70%);
+            animation: floatOrb1 14s ease-in-out infinite alternate;
+        }
+
+        .orb-2 {
+            width: 380px;
+            height: 380px;
+            bottom: 5%;
+            left: -10%;
+            background: radial-gradient(circle, var(--glow-2) 0%, transparent 70%);
+            animation: floatOrb2 18s ease-in-out infinite alternate;
+        }
+
+        .orb-3 {
+            width: 260px;
+            height: 260px;
+            top: 42%;
+            left: 35%;
+            background: radial-gradient(circle, var(--glow-1) 0%, var(--glow-2) 100%);
+            opacity: calc(var(--glow-opacity) * 0.45);
+            animation: floatOrb3 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatOrb1 {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(-45px, 55px, 0) scale(1.12); }
+        }
+
+        @keyframes floatOrb2 {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(55px, -45px, 0) scale(1.15); }
+        }
+
+        @keyframes floatOrb3 {
+            0% { transform: translate3d(-20px, -20px, 0) scale(0.95); }
+            100% { transform: translate3d(30px, 30px, 0) scale(1.08); }
+        }
+
+        /* Subtle Cyber Grid Overlay */
+        .cyber-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 85%);
+        }
+
+        /* Multi-Layered Glassmorphism Surfaces */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 
+                0 12px 40px -10px rgba(0, 0, 0, 0.75),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-top: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+            will-change: transform;
+        }
+
+        .glass-pill:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--border-glow);
+            box-shadow: 0 8px 28px -4px var(--border-glow);
+        }
+
+        .glass-pill:active {
+            transform: scale(0.96);
+        }
+
+        .neon-btn {
+            background: linear-gradient(135deg, var(--glow-1), var(--glow-2));
+            box-shadow: 0 0 22px -2px var(--border-glow);
+            transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            will-change: transform;
+        }
+
+        .neon-btn:hover {
+            filter: brightness(1.12);
+            box-shadow: 0 0 30px 1px var(--border-glow);
+        }
+
+        .neon-btn:active {
+            transform: scale(0.94);
+        }
+
+        .neon-border-focus:focus-within {
+            border-color: var(--border-glow);
+            box-shadow: 
+                0 12px 40px -10px rgba(0, 0, 0, 0.8),
+                0 0 24px -6px var(--border-glow),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+        }
+
+        .verified-glow {
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.75));
+        }
+
+        .accent-text {
+            color: var(--accent);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 25%, var(--glow-2) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.14); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+
+        /* Smooth Message Entrance */
+        .msg-anim {
+            animation: popIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes popIn {
+            from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.98); }
+            to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+        }
+
+        /* Typing Pulse */
+        .dot-glow {
+            background: linear-gradient(135deg, var(--glow-1), var(--glow-2));
+            box-shadow: 0 0 10px var(--glow-1);
+            animation: pulseDot 1.1s infinite ease-in-out;
+        }
+        .dot-glow:nth-child(2) { animation-delay: 0.18s; }
+        .dot-glow:nth-child(3) { animation-delay: 0.36s; }
+
+        @keyframes pulseDot {
+            0%, 100% { transform: scale(0.75); opacity: 0.35; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        /* GPU-Accelerated Voice Wave Bars */
+        .wave-bar {
+            width: 4px;
+            border-radius: 9999px;
+            background: linear-gradient(180deg, var(--glow-2), var(--glow-1));
+            box-shadow: 0 0 10px var(--border-glow);
+            transform-origin: center;
+            will-change: transform;
+            animation: waveBounce 0.95s ease-in-out infinite;
+        }
+        .wave-bar:nth-child(2) { animation-delay: 0.12s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.24s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.36s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.48s; }
+
+        @keyframes waveBounce {
+            0%, 100% { transform: scaleY(0.32); }
+            50% { transform: scaleY(1); }
+        }
+
+        /* Prose & Code Blocks */
+        .ai-prose p { margin-bottom: 0.55rem; line-height: 1.75; }
+        .ai-prose p:last-child { margin-bottom: 0; }
+        .ai-prose ul, .ai-prose ol { margin: 0.5rem 0 0.75rem 0; padding-right: 1.25rem; }
+        .ai-prose ul { list-style-type: disc; }
+        .ai-prose ol { list-style-type: decimal; }
+        .ai-prose li { margin-bottom: 0.25rem; }
+        .ai-prose strong { color: #ffffff; font-weight: 800; }
+        .ai-prose code:not(pre code) {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--accent-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.1rem 0.42rem;
+            border-radius: 0.4rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            direction: ltr;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between selection:bg-pink-500/30 selection:text-white">
+
+    <!-- Ambient Neon Lighting & Cyber Grid -->
+    <div class="ambient-canvas">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div class="cyber-grid"></div>
+
+    <!-- Top Glass Header -->
+    <header class="sticky top-0 z-30 glass-panel border-x-0 border-t-0 px-4 sm:px-6 py-3">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            
+            <!-- Brand + Verified Checkmark -->
+            <div class="flex items-center gap-3">
+                <div class="relative w-11 h-11 rounded-2xl glass-pill flex items-center justify-center overflow-hidden group">
+                    <div class="absolute inset-0 opacity-25" style="background: linear-gradient(135deg, var(--glow-1), var(--glow-2));"></div>
+                    <span class="relative font-mono font-black text-2xl gradient-text tracking-tighter">M</span>
+                </div>
+
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <h1 class="text-xl sm:text-2xl font-black tracking-tight text-white leading-none">moha</h1>
+                        <!-- Official Glowing Verified Badge -->
+                        <svg class="w-5 h-5 text-sky-400 verified-glow shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-label="موثق">
+                            <path d="M12 2L14.8 4.2L18.4 4.1L19.6 7.5L22.5 9.6L21.5 13.1L22.5 16.6L19.6 18.7L18.4 22.1L14.8 22L12 24.2L9.2 22L5.6 22.1L4.4 18.7L1.5 16.6L2.5 13.1L1.5 9.6L4.4 7.5L5.6 4.1L9.2 4.2L12 2ZM10.6 16.2L17.3 9.5L15.9 8.1L10.6 13.4L8.1 10.9L6.7 12.3L10.6 16.2Z"/>
+                        </svg>
+                        <span id="active-mode-tag" class="hidden sm:inline-block mr-1.5 text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-300">خويك الفاهم</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+                        <span class="text-[11px] font-bold text-zinc-400">متصل الآن</span>
+                        <span id="lang-badge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-cyan-300">سعودية</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex items-center gap-2">
+                <!-- Quick Language / Dialect Cycle Pill -->
+                <button onclick="cycleLanguage()" title="تغيير اللغة / اللهجة" class="px-3 py-2.5 rounded-xl glass-pill text-zinc-200 hover:text-white flex items-center gap-1.5 text-xs font-extrabold">
+                    <i data-lucide="languages" class="w-4 h-4 text-cyan-400"></i>
+                    <span id="quick-lang-label">سعودية</span>
+                </button>
+
+                <!-- Auto-Speak Toggle -->
+                <button id="auto-speak-btn" onclick="toggleAutoSpeak()" title="النطق التلقائي للردود" class="p-2.5 rounded-xl glass-pill text-cyan-300 hover:text-white flex items-center gap-1.5 text-xs font-bold">
+                    <i id="auto-speak-icon" data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+
+                <button onclick="clearChat()" title="محادثة جديدة" class="p-2.5 rounded-xl glass-pill text-zinc-300 hover:text-white flex items-center gap-1.5 text-xs font-bold">
+                    <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">تصفير</span>
+                </button>
+                <button onclick="toggleSettings(true)" class="px-3.5 py-2.5 rounded-xl glass-pill text-white flex items-center gap-2 text-xs font-extrabold">
+                    <i data-lucide="sparkles" class="w-4 h-4 accent-text"></i>
+                    <span>تخصيص</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="relative z-10 flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-40 flex flex-col">
+        
+        <!-- Zero-Clutter Direct Launch View -->
+        <div id="welcome-screen" class="flex-1 flex flex-col items-center justify-center my-auto py-8">
+            
+            <!-- Glowing Hero Emblem -->
+            <div class="relative mb-6">
+                <div class="absolute -inset-3 rounded-3xl opacity-45 blur-xl" style="background: linear-gradient(135deg, var(--glow-1), var(--glow-2));"></div>
+                <div class="relative w-20 h-20 rounded-3xl glass-panel flex items-center justify-center">
+                    <span class="font-mono font-black text-4xl gradient-text">M</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center gap-2 mb-5">
+                <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">moha</h2>
+                <svg class="w-6 h-6 text-sky-400 verified-glow" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L14.8 4.2L18.4 4.1L19.6 7.5L22.5 9.6L21.5 13.1L22.5 16.6L19.6 18.7L18.4 22.1L14.8 22L12 24.2L9.2 22L5.6 22.1L4.4 18.7L1.5 16.6L2.5 13.1L1.5 9.6L4.4 7.5L5.6 4.1L9.2 4.2L12 2ZM10.6 16.2L17.3 9.5L15.9 8.1L10.6 13.4L8.1 10.9L6.7 12.3L10.6 16.2Z"/>
+                </svg>
+            </div>
+
+            <!-- Quick Language / Dialect Selector Bar on Launch -->
+            <div id="hero-lang-bar" class="flex flex-wrap items-center justify-center gap-1.5 mb-5 p-1.5 rounded-2xl glass-panel">
+                <button onclick="setLanguage('sa')" id="hero-lang-sa" class="hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition">سعودية</button>
+                <button onclick="setLanguage('dz')" id="hero-lang-dz" class="hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition">جزائرية</button>
+                <button onclick="setLanguage('fr')" id="hero-lang-fr" class="hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition">Français</button>
+                <button onclick="setLanguage('en')" id="hero-lang-en" class="hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition">English</button>
+            </div>
+
+            <!-- Glowing Glass Quick-Action Pills -->
+            <div class="flex flex-wrap items-center justify-center gap-2.5 max-w-xl">
+                <button onclick="useQuickPrompt('اكتب لي كود Lua نظيف ومرتب لروبلوكس')" class="glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs sm:text-sm font-bold text-zinc-100">
+                    <i data-lucide="code-2" class="w-4 h-4 accent-text"></i>
+                    <span>كتابة كود</span>
+                </button>
+
+                <button onclick="openCameraModal()" class="glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs sm:text-sm font-bold text-zinc-100">
+                    <i data-lucide="camera" class="w-4 h-4 text-cyan-400"></i>
+                    <span>تحليل صورة</span>
+                </button>
+
+                <button onclick="openVoiceOverlay()" class="glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs sm:text-sm font-bold text-zinc-100">
+                    <i data-lucide="mic" class="w-4 h-4 text-emerald-400"></i>
+                    <span>محادثة صوتية</span>
+                </button>
+
+                <button onclick="useQuickPrompt('عطني فكرة عملية ومميزة لمشروع أو ماب')" class="glass-pill px-4 py-2.5 rounded-2xl flex items-center gap-2 text-xs sm:text-sm font-bold text-zinc-100">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    <span>فكرة إبداعية</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Messages Stream -->
+        <div id="messages-list" class="hidden flex-col gap-4"></div>
+
+    </main>
+
+    <!-- Floating Glass Input Dock -->
+    <div class="fixed bottom-0 inset-x-0 z-20 pt-2 pb-4 px-4 sm:px-6 bg-gradient-to-t from-[#050508] via-[#050508]/90 to-transparent">
+        <div class="max-w-3xl mx-auto">
+
+            <!-- Live Voice Wave Status Strip (Shown when Listening or Speaking) -->
+            <div id="voice-status-bar" class="hidden mb-2.5 px-4 py-2.5 rounded-2xl glass-panel flex items-center justify-between gap-3 msg-anim">
+                <div class="flex items-center gap-3 min-w-0">
+                    <div class="flex items-center gap-1 h-6 shrink-0" aria-hidden="true">
+                        <span class="wave-bar h-5"></span>
+                        <span class="wave-bar h-6"></span>
+                        <span class="wave-bar h-4"></span>
+                        <span class="wave-bar h-6"></span>
+                        <span class="wave-bar h-5"></span>
+                    </div>
+                    <div class="min-w-0">
+                        <p id="voice-status-title" class="text-xs font-extrabold text-cyan-300">جاري الاستماع...</p>
+                        <p id="voice-transcript-preview" class="text-xs text-zinc-300 truncate">تحدث الآن بأي وقت</p>
+                    </div>
+                </div>
+                <button onclick="stopAllVoice()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-white shrink-0">
+                    إيقاف
+                </button>
+            </div>
+            
+            <!-- Image Preview Chip -->
+            <div id="image-preview-container" class="hidden mb-2.5 p-2 rounded-2xl glass-panel inline-flex items-center gap-3 relative msg-anim">
+                <img id="image-preview-thumb" src="" alt="Preview" class="w-14 h-14 object-cover rounded-xl border border-white/15">
+                <div class="pl-7">
+                    <p class="text-xs font-extrabold text-white">صورة جاهزة للإرسال</p>
+                    <p class="text-[11px] text-zinc-400">اكتب سؤالك أو أرسلها مباشرة</p>
+                </div>
+                <button onclick="removeAttachment()" class="absolute top-1.5 left-1.5 w-6 h-6 rounded-full bg-black/70 text-zinc-300 hover:text-white flex items-center justify-center border border-white/15">
+                    <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+
+            <!-- Glass Input Bar -->
+            <div class="glass-panel neon-border-focus rounded-2xl p-1.5 flex items-end gap-1.5 transition-all">
+                <input type="file" id="file-input" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+
+                <!-- Upload Image -->
+                <button onclick="document.getElementById('file-input').click()" title="رفع صورة" class="p-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition shrink-0">
+                    <i data-lucide="image-plus" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Open Camera -->
+                <button onclick="openCameraModal()" title="تصوير بالكاميرا" class="p-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition shrink-0">
+                    <i data-lucide="camera" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Microphone Voice Input -->
+                <button id="mic-btn" onclick="toggleVoiceInput()" title="محادثة صوتية" class="p-2.5 rounded-xl text-zinc-300 hover:text-white hover:bg-white/10 transition shrink-0">
+                    <i data-lucide="mic" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Prompt Textarea -->
+                <textarea 
+                    id="prompt-input" 
+                    rows="1" 
+                    placeholder="اكتب لـ moha..." 
+                    class="w-full bg-transparent text-white placeholder-zinc-400 text-sm sm:text-base py-2.5 px-2 focus:outline-none resize-none max-h-32 leading-relaxed"
+                    oninput="autoResizeTextarea(this)"
+                    onkeydown="handleInputKeydown(event)"
+                ></textarea>
+
+                <!-- Neon Send Button -->
+                <button id="send-btn" onclick="sendMessage()" class="p-2.5 rounded-xl neon-btn text-white font-bold shrink-0 disabled:opacity-40 disabled:pointer-events-none">
+                    <i data-lucide="arrow-up" class="w-5 h-5 stroke-[2.5]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Voice Conversation Modal -->
+    <div id="voice-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-2xl flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md glass-panel rounded-3xl p-6 flex flex-col items-center text-center relative">
+            <button onclick="closeVoiceOverlay()" class="absolute top-4 left-4 p-2 rounded-xl hover:bg-white/10 text-zinc-300 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="flex items-center gap-1.5 mb-2">
+                <span class="font-extrabold text-lg text-white">moha</span>
+                <svg class="w-5 h-5 text-sky-400 verified-glow" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L14.8 4.2L18.4 4.1L19.6 7.5L22.5 9.6L21.5 13.1L22.5 16.6L19.6 18.7L18.4 22.1L14.8 22L12 24.2L9.2 22L5.6 22.1L4.4 18.7L1.5 16.6L2.5 13.1L1.5 9.6L4.4 7.5L5.6 4.1L9.2 4.2L12 2ZM10.6 16.2L17.3 9.5L15.9 8.1L10.6 13.4L8.1 10.9L6.7 12.3L10.6 16.2Z"/>
+                </svg>
+                <span id="modal-lang-pill" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-white/10 text-cyan-300">سعودية</span>
+            </div>
+
+            <p id="voice-modal-state" class="text-xs font-bold text-zinc-400 mb-6">اضغط المايك وتحدث مباشرة</p>
+
+            <!-- Glowing Voice Wave Visualizer -->
+            <div class="w-32 h-32 rounded-full glass-panel flex items-center justify-center gap-1.5 relative mb-6">
+                <span class="wave-bar h-8"></span>
+                <span class="wave-bar h-12"></span>
+                <span class="wave-bar h-16"></span>
+                <span class="wave-bar h-12"></span>
+                <span class="wave-bar h-8"></span>
+            </div>
+
+            <div id="voice-modal-caption" class="w-full min-h-[56px] max-h-28 overflow-y-auto rounded-2xl bg-black/40 border border-white/10 p-3 text-xs sm:text-sm text-zinc-200 mb-6 leading-relaxed">
+                المحادثة الصوتية جاهزة. قل أي شيء وسأرد عليك صوتياً ونصياً.
+            </div>
+
+            <div class="flex items-center justify-center gap-4 w-full">
+                <button onclick="cycleLanguage()" class="px-4 py-3 rounded-2xl glass-pill text-xs font-extrabold text-zinc-200 flex items-center gap-1.5">
+                    <i data-lucide="languages" class="w-4 h-4 text-cyan-400"></i>
+                    <span>تغيير اللهجة</span>
+                </button>
+
+                <button id="modal-mic-toggle" onclick="toggleVoiceInput()" class="w-16 h-16 rounded-full neon-btn text-white flex items-center justify-center shadow-xl">
+                    <i data-lucide="mic" class="w-7 h-7"></i>
+                </button>
+
+                <button onclick="stopSpeaking()" class="px-4 py-3 rounded-2xl glass-pill text-xs font-extrabold text-zinc-200 flex items-center gap-1.5">
+                    <i data-lucide="volume-x" class="w-4 h-4 text-rose-400"></i>
+                    <span>إسكات</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Camera Glass Modal -->
+    <div id="camera-modal" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-xl flex-col items-center justify-center p-4">
+        <div class="w-full max-w-md glass-panel rounded-3xl overflow-hidden flex flex-col">
+            <div class="px-5 py-3.5 border-b border-white/10 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
+                    <h3 class="font-extrabold text-white text-sm">كاميرا moha المباشرة</h3>
+                </div>
+                <button onclick="closeCameraModal()" class="p-1.5 rounded-xl hover:bg-white/10 text-zinc-300 hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="relative bg-black aspect-[4/3] w-full flex items-center justify-center overflow-hidden">
+                <video id="camera-video" autoplay playsinline class="w-full h-full object-cover"></video>
+                <canvas id="camera-canvas" class="hidden"></canvas>
+                
+                <!-- Sleek Viewfinder Frame -->
+                <div class="absolute inset-4 border border-white/20 rounded-2xl pointer-events-none flex flex-col justify-between p-3">
+                    <div class="flex justify-between">
+                        <span class="w-4 h-4 border-t-2 border-r-2 border-cyan-400 rounded-tr-md"></span>
+                        <span class="w-4 h-4 border-t-2 border-l-2 border-cyan-400 rounded-tl-md"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="w-4 h-4 border-b-2 border-r-2 border-pink-500 rounded-br-md"></span>
+                        <span class="w-4 h-4 border-b-2 border-l-2 border-pink-500 rounded-bl-md"></span>
+                    </div>
+                </div>
+
+                <div id="camera-error" class="hidden text-center p-6 text-zinc-300 text-xs">
+                    <i data-lucide="camera-off" class="w-9 h-9 mx-auto mb-2 text-rose-400"></i>
+                    <p>تعذر فتح الكاميرا، تأكد من إعطاء صلاحية الكاميرا للمتصفح.</p>
+                </div>
+            </div>
+
+            <div class="p-4 flex items-center justify-around bg-black/50 border-t border-white/10">
+                <button onclick="switchCamera()" class="p-3.5 rounded-2xl glass-pill text-white" title="تبديل الكاميرا">
+                    <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                </button>
+
+                <button onclick="capturePhoto()" class="w-16 h-16 rounded-full border-2 border-white/40 p-1.5 flex items-center justify-center active:scale-90 transition">
+                    <div class="w-full h-full rounded-full neon-btn"></div>
+                </button>
+
+                <div class="w-12"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glass Customization Drawer -->
+    <div id="settings-modal" class="fixed inset-0 z-50 hidden">
+        <div onclick="toggleSettings(false)" class="absolute inset-0 bg-black/75 backdrop-blur-md"></div>
+        
+        <div class="absolute inset-y-0 left-0 w-full max-w-md glass-panel border-y-0 border-l-0 p-5 sm:p-6 overflow-y-auto flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 rounded-xl bg-white/10 accent-text">
+                            <i data-lucide="sliders-horizontal" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-black text-lg text-white">تخصيص moha</h3>
+                    </div>
+                    <button onclick="toggleSettings(false)" class="p-2 rounded-xl hover:bg-white/10 text-zinc-300 hover:text-white">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-6 mt-5">
+
+                    <!-- Language & Dialect Selector -->
+                    <div>
+                        <label class="block text-xs font-extrabold text-zinc-300 mb-2.5">اللغة واللهجة (النص والصوت)</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setLanguage('sa')" id="drawer-lang-sa" class="drawer-lang-btn p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">سعودية</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">لهجة سعودية طبيعية</div>
+                            </button>
+                            <button onclick="setLanguage('dz')" id="drawer-lang-dz" class="drawer-lang-btn p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">جزائرية</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">لهجة جزائرية طبيعية</div>
+                            </button>
+                            <button onclick="setLanguage('fr')" id="drawer-lang-fr" class="drawer-lang-btn p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">Français (فرنسية)</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">Réponses naturelles en français</div>
+                            </button>
+                            <button onclick="setLanguage('en')" id="drawer-lang-en" class="drawer-lang-btn p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">English (إنجليزية)</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">Natural conversational English</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Lighting Themes -->
+                    <div>
+                        <label class="block text-xs font-extrabold text-zinc-300 mb-3">إضاءة النيون المحيطية</label>
+                        <div class="grid grid-cols-2 gap-2.5">
+                            <button onclick="setThemeColor('vice')" id="theme-vice" class="theme-btn p-3 rounded-2xl glass-pill flex items-center gap-3 text-right">
+                                <span class="w-6 h-6 rounded-full shrink-0 shadow-[0_0_12px_#ff2a85]" style="background: linear-gradient(135deg, #ff2a85, #00f0ff);"></span>
+                                <div>
+                                    <div class="text-xs font-extrabold text-white">Vice City</div>
+                                    <div class="text-[10px] text-zinc-400">وردي وسماوي نيون</div>
+                                </div>
+                            </button>
+
+                            <button onclick="setThemeColor('gold')" id="theme-gold" class="theme-btn p-3 rounded-2xl glass-pill flex items-center gap-3 text-right">
+                                <span class="w-6 h-6 rounded-full shrink-0 shadow-[0_0_12px_#f59e0b]" style="background: linear-gradient(135deg, #f59e0b, #fde047);"></span>
+                                <div>
+                                    <div class="text-xs font-extrabold text-white">ذهبي ملكي</div>
+                                    <div class="text-[10px] text-zinc-400">فخامة ووضوح</div>
+                                </div>
+                            </button>
+
+                            <button onclick="setThemeColor('emerald')" id="theme-emerald" class="theme-btn p-3 rounded-2xl glass-pill flex items-center gap-3 text-right">
+                                <span class="w-6 h-6 rounded-full shrink-0 shadow-[0_0_12px_#10b981]" style="background: linear-gradient(135deg, #10b981, #22d3ee);"></span>
+                                <div>
+                                    <div class="text-xs font-extrabold text-white">زمردي سايبر</div>
+                                    <div class="text-[10px] text-zinc-400">أخضر مشع</div>
+                                </div>
+                            </button>
+
+                            <button onclick="setThemeColor('purple')" id="theme-purple" class="theme-btn p-3 rounded-2xl glass-pill flex items-center gap-3 text-right">
+                                <span class="w-6 h-6 rounded-full shrink-0 shadow-[0_0_12px_#a855f7]" style="background: linear-gradient(135deg, #a855f7, #ec4899);"></span>
+                                <div>
+                                    <div class="text-xs font-extrabold text-white">بنفسجي كهربائي</div>
+                                    <div class="text-[10px] text-zinc-400">طاقة عالية</div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Glow Intensity & Glass Transparency Sliders -->
+                    <div class="space-y-4 p-4 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-zinc-300">قوة الإضاءة (Glow)</span>
+                                <span id="glow-val-label" class="accent-text font-mono">42%</span>
+                            </div>
+                            <input type="range" id="glow-slider" min="15" max="80" value="42" oninput="updateVisualSliders()" class="w-full accent-pink-500 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1.5">
+                                <span class="text-zinc-300">شفافية الزجاج (Glass)</span>
+                                <span id="glass-val-label" class="text-cyan-400 font-mono">22px</span>
+                            </div>
+                            <input type="range" id="glass-slider" min="8" max="36" value="22" oninput="updateVisualSliders()" class="w-full accent-cyan-400 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Persona Presets -->
+                    <div>
+                        <label class="block text-xs font-extrabold text-zinc-300 mb-2.5">أسلوب شخصية moha</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="selectPersonaPreset('bro', 'صاحبك الفاهم')" class="p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">صاحبك الفاهم</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">طبيعي، هادئ، ويعطيك الزبدة</div>
+                            </button>
+                            <button onclick="selectPersonaPreset('hacker', 'مبرمج عملي')" class="p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">مبرمج عملي</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">أكواد نظيفة وواضحة</div>
+                            </button>
+                            <button onclick="selectPersonaPreset('gamer', 'لاعب ومطور')" class="p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">لاعب ومطور</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">أداء، فريمات، وأفكار لعب</div>
+                            </button>
+                            <button onclick="selectPersonaPreset('savage', 'مباشر ومختصر')" class="p-3 rounded-2xl glass-pill text-right">
+                                <div class="font-extrabold text-xs text-white">مباشر ومختصر</div>
+                                <div class="text-[10px] text-zinc-400 mt-0.5">ردود قصيرة وواضحة</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Voice Auto-Speak Toggle in Drawer -->
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.03] border border-white/10">
+                        <div>
+                            <div class="text-xs font-extrabold text-white">قراءة الردود صوتياً تلقائياً</div>
+                            <div class="text-[10px] text-zinc-400 mt-0.5">ينطق moha الرد باللغة المحددة</div>
+                        </div>
+                        <button id="drawer-autospeak-toggle" onclick="toggleAutoSpeak()" class="px-3 py-1.5 rounded-xl glass-pill text-xs font-extrabold text-cyan-300">
+                            مفعّل
+                        </button>
+                    </div>
+
+                    <!-- Custom Instructions -->
+                    <div>
+                        <label for="custom-instructions" class="block text-xs font-extrabold text-zinc-300 mb-2">توجيهات مخصصة</label>
+                        <textarea id="custom-instructions" rows="3" class="w-full rounded-2xl bg-black/40 border border-white/15 p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-white/40 leading-relaxed" placeholder="اكتب هنا كيف تبغى moha يتكلم معك..."></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="pt-5 mt-6 border-t border-white/10">
+                <button onclick="saveCustomSettings()" class="w-full py-3.5 rounded-2xl neon-btn text-white font-black text-sm tracking-wide">
+                    حفظ وتطبيق
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Glass Toast -->
+    <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-50 hidden px-4 py-2 rounded-full glass-panel text-xs font-extrabold text-white flex items-center gap-2 msg-anim">
+        <span class="w-2 h-2 rounded-full neon-btn"></span>
+        <span id="toast-msg">تم التطبيق</span>
+    </div>
+
+    <script>
+        // --- Gemini API Setup ---
+        const apiKey = ""; // Injected automatically by runtime
+        const GEMINI_MODEL = "gemini-2.5-flash";
+
+        // --- App State ---
+        let chatHistory = [];
+        let attachedImage = null;
+        let cameraStream = null;
+        let currentFacingMode = "environment";
+        let isGenerating = false;
+
+        // Voice State (SpeechRecognition + SpeechSynthesis)
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
+        let isSpeaking = false;
+        let voiceModalOpen = false;
+
+        const languageConfig = {
+            sa: {
+                key: 'sa',
+                label: 'سعودية',
+                speechLang: 'ar-SA',
+                dir: 'rtl',
+                placeholder: 'اكتب أو تكلم باللهجة السعودية...',
+                instruction: 'تحدث باللهجة السعودية الطبيعية والواضحة مثل صديق عادي وواقعي. تجنب المبالغة أو الألقاب الاستعراضية وادخل في الموضوع مباشرة.'
+            },
+            dz: {
+                key: 'dz',
+                label: 'جزائرية',
+                speechLang: 'ar-DZ',
+                dir: 'rtl',
+                placeholder: 'اكتب ولا اهدر بالدارجة الجزائرية...',
+                instruction: 'تحدث باللهجة الجزائرية الطبيعية والواضحة بأسلوب إنسان عادي وواقعي، بدون مبالغة أو تصنع، وبشكل مفهوم وسلس.'
+            },
+            fr: {
+                key: 'fr',
+                label: 'Français',
+                speechLang: 'fr-FR',
+                dir: 'ltr',
+                placeholder: 'Écris ou parle à moha en français...',
+                instruction: 'Réponds en français naturel, posé et direct, comme un ami intelligent et simple, sans ton exagéré ou artificiel.'
+            },
+            en: {
+                key: 'en',
+                label: 'English',
+                speechLang: 'en-US',
+                dir: 'ltr',
+                placeholder: 'Message or talk to moha in English...',
+                instruction: 'Reply in natural, grounded, conversational English like a smart normal friend—clear, direct, and free of over-the-top hype.'
+            }
+        };
+
+        const languageOrder = ['sa', 'dz', 'fr', 'en'];
+
+        // Grounded, Natural Human-Like Personas (No exaggerated hype)
+        const personaPrompts = {
+            bro: `أنت "moha". تكلم كشخص طبيعي وذكي وواقعي، بأسلوب إنسان عادي مو روبوت رسمي ولا مبالغ فيه. عطِ إجابات واضحة ومفيدة وودية بشكل طبيعي بدون تكلّف.`,
+            hacker: `أنت "moha" مطور ومبرمج عملي. تكلم ببساطة ووضوح، وقدم أكواد نظيفة وقابلة للتنفيذ مباشرة مع شرح مختصر ومفيد بدون حشو.`,
+            gamer: `أنت "moha" لاعب ومطور ألعاب. تكلم بأسلوب طبيعي وعملي عن الألعاب، الأداء، الإعدادات، والأفكار بدون مبالغة أو كلام استعراضي.`,
+            savage: `أنت "moha". تكلم باختصار ووضوح وواقعية، وادخل في صلب الفكرة مباشرة.`
+        };
+
+        const themes = {
+            vice: { glow1: '#ff2a85', glow2: '#00f0ff', accent: '#ff2a85', accent2: '#00f0ff', borderGlow: 'rgba(255, 42, 133, 0.45)' },
+            gold: { glow1: '#f59e0b', glow2: '#fde047', accent: '#fbbf24', accent2: '#fde047', borderGlow: 'rgba(245, 158, 11, 0.45)' },
+            emerald: { glow1: '#10b981', glow2: '#06b6d4', accent: '#34d399', accent2: '#22d3ee', borderGlow: 'rgba(16, 185, 129, 0.45)' },
+            purple: { glow1: '#a855f7', glow2: '#ec4899', accent: '#c084fc', accent2: '#f472b6', borderGlow: 'rgba(168, 85, 247, 0.45)' }
+        };
+
+        const defaultSettings = {
+            theme: 'vice',
+            glowOpacity: 42,
+            glassBlur: 22,
+            language: 'sa',
+            autoSpeak: true,
+            personaKey: 'bro',
+            personaLabel: 'صاحبك الفاهم',
+            customInstructions: personaPrompts.bro
+        };
+
+        let userSettings = { ...defaultSettings };
+
+        // --- Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            loadSettings();
+            setupSpeechRecognition();
+        });
+
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('moha_glass_v4');
+                if (saved) userSettings = { ...defaultSettings, ...JSON.parse(saved) };
+            } catch (e) {}
+
+            applyTheme(userSettings.theme);
+            applyLanguageUI(userSettings.language);
+            applyAutoSpeakUI();
+
+            document.getElementById('glow-slider').value = userSettings.glowOpacity;
+            document.getElementById('glass-slider').value = userSettings.glassBlur;
+            updateVisualSliders();
+
+            document.getElementById('active-mode-tag').textContent = userSettings.personaLabel;
+            document.getElementById('custom-instructions').value = userSettings.customInstructions;
+        }
+
+        function setLanguage(langKey) {
+            if (!languageConfig[langKey]) return;
+            userSettings.language = langKey;
+            applyLanguageUI(langKey);
+            if (recognition) {
+                recognition.lang = languageConfig[langKey].speechLang;
+            }
+            try {
+                localStorage.setItem('moha_glass_v4', JSON.stringify(userSettings));
+            } catch (e) {}
+            showToast(`اللغة: ${languageConfig[langKey].label}`);
+        }
+
+        function cycleLanguage() {
+            const idx = languageOrder.indexOf(userSettings.language);
+            const nextLang = languageOrder[(idx + 1) % languageOrder.length];
+            setLanguage(nextLang);
+        }
+
+        function applyLanguageUI(langKey) {
+            const cfg = languageConfig[langKey] || languageConfig.sa;
+            document.getElementById('lang-badge').textContent = cfg.label;
+            document.getElementById('quick-lang-label').textContent = cfg.label;
+            document.getElementById('modal-lang-pill').textContent = cfg.label;
+
+            const promptInput = document.getElementById('prompt-input');
+            promptInput.placeholder = cfg.placeholder;
+            promptInput.dir = cfg.dir;
+
+            document.querySelectorAll('.hero-lang-btn').forEach(btn => {
+                btn.className = 'hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition text-zinc-300 hover:text-white';
+            });
+            const activeHeroBtn = document.getElementById(`hero-lang-${langKey}`);
+            if (activeHeroBtn) {
+                activeHeroBtn.className = 'hero-lang-btn px-3 py-1.5 rounded-xl text-xs font-extrabold transition neon-btn text-white';
+            }
+
+            document.querySelectorAll('.drawer-lang-btn').forEach(btn => {
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.09)';
+            });
+            const activeDrawerBtn = document.getElementById(`drawer-lang-${langKey}`);
+            if (activeDrawerBtn) {
+                activeDrawerBtn.style.borderColor = 'var(--accent)';
+            }
+        }
+
+        function toggleAutoSpeak() {
+            userSettings.autoSpeak = !userSettings.autoSpeak;
+            if (!userSettings.autoSpeak) stopSpeaking();
+            applyAutoSpeakUI();
+            try {
+                localStorage.setItem('moha_glass_v4', JSON.stringify(userSettings));
+            } catch (e) {}
+            showToast(userSettings.autoSpeak ? 'النطق الصوتي مفعّل' : 'تم إيقاف النطق الصوتي');
+        }
+
+        function applyAutoSpeakUI() {
+            const btn = document.getElementById('auto-speak-btn');
+            const drawerToggle = document.getElementById('drawer-autospeak-toggle');
+            if (userSettings.autoSpeak) {
+                btn.classList.add('text-cyan-300');
+                btn.classList.remove('text-zinc-500');
+                if (drawerToggle) {
+                    drawerToggle.textContent = 'مفعّل';
+                    drawerToggle.className = 'px-3 py-1.5 rounded-xl glass-pill text-xs font-extrabold text-cyan-300';
+                }
+            } else {
+                btn.classList.remove('text-cyan-300');
+                btn.classList.add('text-zinc-500');
+                if (drawerToggle) {
+                    drawerToggle.textContent = 'متوقف';
+                    drawerToggle.className = 'px-3 py-1.5 rounded-xl glass-pill text-xs font-extrabold text-zinc-400';
+                }
+            }
+        }
+
+        function applyTheme(themeKey) {
+            const t = themes[themeKey] || themes.vice;
+            const root = document.documentElement.style;
+            root.setProperty('--glow-1', t.glow1);
+            root.setProperty('--glow-2', t.glow2);
+            root.setProperty('--accent', t.accent);
+            root.setProperty('--accent-secondary', t.accent2);
+            root.setProperty('--border-glow', t.borderGlow);
+            userSettings.theme = themeKey;
+
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.09)';
+            });
+            const activeBtn = document.getElementById(`theme-${themeKey}`);
+            if (activeBtn) activeBtn.style.borderColor = t.accent;
+        }
+
+        function setThemeColor(themeKey) {
+            applyTheme(themeKey);
+        }
+
+        function updateVisualSliders() {
+            const glowVal = document.getElementById('glow-slider').value;
+            const glassVal = document.getElementById('glass-slider').value;
+
+            document.getElementById('glow-val-label').textContent = `${glowVal}%`;
+            document.getElementById('glass-val-label').textContent = `${glassVal}px`;
+
+            document.documentElement.style.setProperty('--glow-opacity', (glowVal / 100).toFixed(2));
+            document.documentElement.style.setProperty('--glass-blur', `${glassVal}px`);
+
+            userSettings.glowOpacity = Number(glowVal);
+            userSettings.glassBlur = Number(glassVal);
+        }
+
+        function selectPersonaPreset(key, label) {
+            userSettings.personaKey = key;
+            userSettings.personaLabel = label;
+            document.getElementById('custom-instructions').value = personaPrompts[key];
+            showToast(`تم اختيار: ${label}`);
+        }
+
+        function saveCustomSettings() {
+            const customText = document.getElementById('custom-instructions').value.trim();
+            userSettings.customInstructions = customText || personaPrompts.bro;
+            document.getElementById('active-mode-tag').textContent = userSettings.personaLabel;
+
+            try {
+                localStorage.setItem('moha_glass_v4', JSON.stringify(userSettings));
+            } catch (e) {}
+
+            toggleSettings(false);
+            showToast('تم حفظ الإعدادات!');
+        }
+
+        function toggleSettings(show) {
+            document.getElementById('settings-modal').classList.toggle('hidden', !show);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2200);
+        }
+
+        // --- Input & Attachments ---
+        function autoResizeTextarea(el) {
+            el.style.height = 'auto';
+            el.style.height = Math.min(el.scrollHeight, 128) + 'px';
+        }
+
+        function handleInputKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
+
+        function useQuickPrompt(text) {
+            const input = document.getElementById('prompt-input');
+            input.value = text;
+            autoResizeTextarea(input);
+            sendMessage();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                const base64 = dataUrl.split(',')[1];
+                setAttachment(base64, file.type || 'image/jpeg', dataUrl);
+            };
+            reader.readAsDataURL(file);
+            event.target.value = '';
+        }
+
+        function setAttachment(base64, mimeType, dataUrl) {
+            attachedImage = { base64, mimeType, dataUrl };
+            document.getElementById('image-preview-thumb').src = dataUrl;
+            document.getElementById('image-preview-container').classList.remove('hidden');
+        }
+
+        function removeAttachment() {
+            attachedImage = null;
+            document.getElementById('image-preview-container').classList.add('hidden');
+            document.getElementById('image-preview-thumb').src = '';
+        }
+
+        // --- Live Camera ---
+        async function openCameraModal() {
+            const modal = document.getElementById('camera-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            await startCamera();
+        }
+
+        async function startCamera() {
+            stopCameraStream();
+            const video = document.getElementById('camera-video');
+            const errorBox = document.getElementById('camera-error');
+            video.classList.remove('hidden');
+            errorBox.classList.add('hidden');
+
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: currentFacingMode },
+                    audio: false
+                });
+                video.srcObject = cameraStream;
+            } catch (err) {
+                video.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+            }
+        }
+
+        function stopCameraStream() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+        }
+
+        async function switchCamera() {
+            currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+            await startCamera();
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('camera-video');
+            const canvas = document.getElementById('camera-canvas');
+            if (!video.videoWidth) return;
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+            const base64 = dataUrl.split(',')[1];
+            setAttachment(base64, 'image/jpeg', dataUrl);
+
+            closeCameraModal();
+            showToast('تم التقاط الصورة!');
+        }
+
+        function closeCameraModal() {
+            stopCameraStream();
+            const modal = document.getElementById('camera-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // --- Voice Conversation (Speech Recognition + Speech Synthesis) ---
+        function setupSpeechRecognition() {
+            if (!SpeechRecognition) return;
+            try {
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = true;
+                recognition.lang = (languageConfig[userSettings.language] || languageConfig.sa).speechLang;
+
+                recognition.onstart = () => {
+                    isListening = true;
+                    updateVoiceUI('listening', 'جاري الاستماع...', 'تحدث الآن...');
+                };
+
+                recognition.onresult = (event) => {
+                    let interimText = '';
+                    let finalText = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalText += transcript;
+                        } else {
+                            interimText += transcript;
+                        }
+                    }
+
+                    const liveText = finalText || interimText;
+                    if (liveText) {
+                        const inputEl = document.getElementById('prompt-input');
+                        inputEl.value = liveText;
+                        autoResizeTextarea(inputEl);
+                        updateVoiceUI('listening', 'جاري الاستماع...', liveText);
+                    }
+
+                    if (finalText.trim()) {
+                        setTimeout(() => {
+                            if (!isGenerating) sendMessage({ fromVoice: true });
+                        }, 180);
+                    }
+                };
+
+                recognition.onerror = (event) => {
+                    isListening = false;
+                    if (event.error === 'not-allowed') {
+                        updateVoiceUI('idle', 'صلاحية المايك مطلوبة', 'اسمح للمتصفح بالوصول إلى الميكروفون أو اكتب رسالتك.');
+                        showToast('يرجى السماح باستخدام الميكروفون');
+                    } else {
+                        updateVoiceUI('idle', 'المايك متوقف', 'يمكنك المحاولة مرة أخرى أو الكتابة مباشرة.');
+                    }
+                };
+
+                recognition.onend = () => {
+                    isListening = false;
+                    if (!isSpeaking) {
+                        setTimeout(() => {
+                            if (!isListening && !isSpeaking) {
+                                document.getElementById('voice-status-bar').classList.add('hidden');
+                            }
+                        }, 900);
+                    }
+                    const micBtn = document.getElementById('mic-btn');
+                    if (micBtn) micBtn.classList.remove('ring-2', 'ring-cyan-400', 'text-cyan-300');
+                };
+            } catch (e) {
+                recognition = null;
+            }
+        }
+
+        function toggleVoiceInput() {
+            stopSpeaking();
+
+            if (!SpeechRecognition || !recognition) {
+                openVoiceOverlay();
+                updateVoiceUI('idle', 'الإدخال الصوتي غير مدعوم هنا', 'متصفحك لا يدعم SpeechRecognition، يمكنك الكتابة وسيقوم moha بقراءة الرد صوتياً.');
+                return;
+            }
+
+            if (isListening) {
+                try { recognition.stop(); } catch (e) {}
+                isListening = false;
+                return;
+            }
+
+            recognition.lang = (languageConfig[userSettings.language] || languageConfig.sa).speechLang;
+            const micBtn = document.getElementById('mic-btn');
+            if (micBtn) micBtn.classList.add('ring-2', 'ring-cyan-400', 'text-cyan-300');
+
+            try {
+                recognition.start();
+            } catch (e) {
+                isListening = false;
+            }
+        }
+
+        function openVoiceOverlay() {
+            voiceModalOpen = true;
+            const modal = document.getElementById('voice-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            applyLanguageUI(userSettings.language);
+            if (!isListening && !isSpeaking) {
+                toggleVoiceInput();
+            }
+        }
+
+        function closeVoiceOverlay() {
+            voiceModalOpen = false;
+            const modal = document.getElementById('voice-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            stopAllVoice();
+        }
+
+        function updateVoiceUI(mode, title, detail) {
+            const bar = document.getElementById('voice-status-bar');
+            const statusTitle = document.getElementById('voice-status-title');
+            const preview = document.getElementById('voice-transcript-preview');
+            const modalState = document.getElementById('voice-modal-state');
+            const modalCaption = document.getElementById('voice-modal-caption');
+
+            if (mode === 'listening' || mode === 'speaking') {
+                bar.classList.remove('hidden');
+            }
+
+            if (statusTitle) statusTitle.textContent = title;
+            if (preview) preview.textContent = detail;
+            if (modalState) modalState.textContent = title;
+            if (modalCaption && detail) modalCaption.textContent = detail;
+        }
+
+        function cleanTextForSpeech(text) {
+            return text
+                .replace(/```[\s\S]*?```/g, ' تم إرسال الكود في الشاشة. ')
+                .replace(/`([^`]+)`/g, '$1')
+                .replace(/\*\*(.*?)\*\*/g, '$1')
+                .replace(/[#*_~>-]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function speakReply(rawText) {
+            if (!userSettings.autoSpeak || !('speechSynthesis' in window)) return;
+            stopSpeaking();
+
+            const spoken = cleanTextForSpeech(rawText);
+            if (!spoken) return;
+
+            try {
+                const utterance = new SpeechSynthesisUtterance(spoken);
+                const cfg = languageConfig[userSettings.language] || languageConfig.sa;
+                utterance.lang = cfg.speechLang;
+
+                const voices = window.speechSynthesis.getVoices();
+                const langPrefix = cfg.speechLang.split('-')[0];
+                const matchedVoice =
+                    voices.find(v => v.lang.toLowerCase() === cfg.speechLang.toLowerCase()) ||
+                    voices.find(v => v.lang.toLowerCase().startsWith(langPrefix));
+                if (matchedVoice) {
+                    utterance.voice = matchedVoice;
+                }
+
+                utterance.rate = 1.02;
+                utterance.pitch = 1.0;
+
+                utterance.onstart = () => {
+                    isSpeaking = true;
+                    updateVoiceUI('speaking', 'moha يتحدث...', spoken.slice(0, 140));
+                };
+
+                utterance.onend = () => {
+                    isSpeaking = false;
+                    document.getElementById('voice-status-bar').classList.add('hidden');
+                    if (voiceModalOpen) {
+                        updateVoiceUI('idle', 'جاهز للاستماع', 'اضغط المايك للتحدث مرة أخرى.');
+                    }
+                };
+
+                utterance.onerror = () => {
+                    isSpeaking = false;
+                    document.getElementById('voice-status-bar').classList.add('hidden');
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                isSpeaking = false;
+            }
+        }
+
+        function stopSpeaking() {
+            isSpeaking = false;
+            if ('speechSynthesis' in window) {
+                try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+        }
+
+        function stopAllVoice() {
+            stopSpeaking();
+            if (isListening && recognition) {
+                try { recognition.stop(); } catch (e) {}
+                isListening = false;
+            }
+            document.getElementById('voice-status-bar').classList.add('hidden');
+        }
+
+        // --- Chat Execution ---
+        function clearChat() {
+            stopAllVoice();
+            chatHistory = [];
+            const list = document.getElementById('messages-list');
+            list.innerHTML = '';
+            list.classList.add('hidden');
+            list.classList.remove('flex');
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            removeAttachment();
+        }
+
+        async function sendMessage(options = {}) {
+            if (isGenerating) return;
+
+            const inputEl = document.getElementById('prompt-input');
+            const text = inputEl.value.trim();
+            const currentImage = attachedImage;
+
+            if (!text && !currentImage) return;
+
+            if (isListening && recognition) {
+                try { recognition.stop(); } catch (e) {}
+                isListening = false;
+            }
+
+            document.getElementById('welcome-screen').classList.add('hidden');
+            const messagesList = document.getElementById('messages-list');
+            messagesList.classList.remove('hidden');
+            messagesList.classList.add('flex');
+
+            inputEl.value = '';
+            inputEl.style.height = 'auto';
+            removeAttachment();
+
+            appendUserBubble(text, currentImage ? currentImage.dataUrl : null);
+
+            const userParts = [];
+            if (text) {
+                userParts.push({ text: text });
+            } else if (currentImage) {
+                userParts.push({ text: "حلل هذه الصورة ووضح محتواها بشكل طبيعي ومباشر." });
+            }
+
+            if (currentImage) {
+                userParts.push({
+                    inlineData: {
+                        mimeType: currentImage.mimeType,
+                        data: currentImage.base64
+                    }
+                });
+            }
+
+            chatHistory.push({ role: 'user', parts: userParts });
+
+            isGenerating = true;
+            document.getElementById('send-btn').disabled = true;
+            const loadingId = appendTypingBubble();
+
+            try {
+                const replyText = await callGeminiAPI();
+                removeElementById(loadingId);
+                appendAIBubble(replyText);
+                chatHistory.push({ role: 'model', parts: [{ text: replyText }] });
+
+                if (voiceModalOpen) {
+                    updateVoiceUI('speaking', 'رد moha', replyText);
+                }
+                speakReply(replyText);
+            } catch (error) {
+                removeElementById(loadingId);
+                const errMsg = 'تعذر إتمام الطلب الآن، أعد المحاولة بعد قليل.';
+                appendAIBubble(errMsg);
+                if (voiceModalOpen) {
+                    updateVoiceUI('idle', 'خطأ في الاتصال', errMsg);
+                }
+            } finally {
+                isGenerating = false;
+                document.getElementById('send-btn').disabled = false;
+                scrollToBottom();
+            }
+        }
+
+        async function callGeminiAPI() {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`;
+            const langCfg = languageConfig[userSettings.language] || languageConfig.sa;
+
+            const systemRule = `${userSettings.customInstructions}\n${langCfg.instruction}\nقاعدة: تكلم بشكل طبيعي وواقعي كصديق عادي بدون مبالغة أو ألقاب استعراضية.`;
+
+            const payload = {
+                contents: chatHistory,
+                systemInstruction: {
+                    parts: [{ text: systemRule }]
+                }
+            };
+
+            const delays = [1000, 2000, 4000];
+            for (let attempt = 0; attempt <= delays.length; attempt++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                    const data = await response.json();
+                    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (text) return text;
+                    throw new Error('Empty response');
+                } catch (err) {
+                    if (attempt === delays.length) throw err;
+                    await new Promise(res => setTimeout(res, delays[attempt]));
+                }
+            }
+        }
+
+        // --- Message Rendering ---
+        function appendUserBubble(text, imageUrl) {
+            const list = document.getElementById('messages-list');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex justify-start msg-anim';
+
+            const imgHtml = imageUrl
+                ? `<img src="${imageUrl}" alt="صورة" class="max-w-xs sm:max-w-sm rounded-2xl mb-2 border border-white/15 shadow-lg">`
+                : '';
+            const safeText = text ? escapeHtml(text).replace(/\n/g, '<br>') : '';
+
+            wrapper.innerHTML = `
+                <div class="max-w-[85%] sm:max-w-[75%] rounded-3xl rounded-tr-md px-4 py-3 text-white shadow-lg border border-white/15" style="background: linear-gradient(135deg, rgba(255,255,255,0.11), rgba(255,255,255,0.05)); backdrop-filter: blur(16px);">
+                    ${imgHtml}
+                    ${safeText ? `<p class="text-sm sm:text-base leading-relaxed font-medium">${safeText}</p>` : ''}
+                </div>
+            `;
+            list.appendChild(wrapper);
+            scrollToBottom();
+        }
+
+        function appendTypingBubble() {
+            const list = document.getElementById('messages-list');
+            const id = 'typing-' + Date.now();
+            const wrapper = document.createElement('div');
+            wrapper.id = id;
+            wrapper.className = 'flex items-start gap-2.5 msg-anim';
+            wrapper.innerHTML = `
+                <div class="w-9 h-9 rounded-2xl glass-panel flex items-center justify-center shrink-0 mt-0.5">
+                    <span class="font-mono font-black text-sm gradient-text">M</span>
+                </div>
+                <div class="glass-panel px-4 py-3.5 rounded-3xl rounded-tl-md flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full dot-glow"></span>
+                    <span class="w-2 h-2 rounded-full dot-glow"></span>
+                    <span class="w-2 h-2 rounded-full dot-glow"></span>
+                </div>
+            `;
+            list.appendChild(wrapper);
+            scrollToBottom();
+            return id;
+        }
+
+        function appendAIBubble(rawText) {
+            const list = document.getElementById('messages-list');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex items-start gap-2.5 msg-anim';
+
+            wrapper.innerHTML = `
+                <div class="w-9 h-9 rounded-2xl glass-panel flex items-center justify-center shrink-0 mt-0.5 relative">
+                    <span class="font-mono font-black text-sm gradient-text">M</span>
+                </div>
+                <div class="max-w-[88%] sm:max-w-[82%] glass-panel px-4 py-3.5 rounded-3xl rounded-tl-md text-zinc-100 text-sm sm:text-base ai-prose">
+                    ${formatMarkdown(rawText)}
+                </div>
+            `;
+            list.appendChild(wrapper);
+            lucide.createIcons();
+            scrollToBottom();
+        }
+
+        function removeElementById(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function scrollToBottom() {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        function formatMarkdown(text) {
+            const codeBlocks = [];
+            let processed = text.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+                const index = codeBlocks.length;
+                const language = lang || 'code';
+                const cleanCode = escapeHtml(code.trim());
+                codeBlocks.push(`
+                    <div class="my-2.5 rounded-2xl overflow-hidden border border-white/15 bg-black/75 text-left shadow-xl" dir="ltr">
+                        <div class="px-3.5 py-2 bg-white/5 border-b border-white/10 flex items-center justify-between text-xs text-zinc-300 font-mono">
+                            <span class="font-bold">${language}</span>
+                            <button onclick="copyCodeBlock(this)" class="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-white/5 hover:bg-white/15 text-zinc-200 hover:text-white transition">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                <span>نسخ</span>
+                            </button>
+                        </div>
+                        <pre class="p-3.5 overflow-x-auto text-xs sm:text-sm font-mono text-zinc-100 leading-relaxed"><code>${cleanCode}</code></pre>
+                    </div>
+                `);
+                return `__CODE_BLOCK_${index}__`;
+            });
+
+            processed = escapeHtml(processed);
+            processed = processed.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            processed = processed.replace(/`([^`]+)`/g, '<code>$1</code>');
+            processed = processed.replace(/^\s*[\-\*]\s+(.*)$/gm, '<li>$1</li>');
+            processed = processed.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+
+            processed = processed.split(/\n{2,}/).map(p => {
+                if (p.startsWith('<ul>') || p.includes('__CODE_BLOCK_')) return p;
+                return `<p>${p.replace(/\n/g, '<br>')}</p>`;
+            }).join('');
+
+            codeBlocks.forEach((block, i) => {
+                processed = processed.replace(`__CODE_BLOCK_${i}__`, block);
+            });
+
+            return processed;
+        }
+
+        function copyCodeBlock(btn) {
+            const codeEl = btn.closest('div').nextElementSibling.querySelector('code');
+            const textarea = document.createElement('textarea');
+            textarea.value = codeEl.innerText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            const span = btn.querySelector('span');
+            span.textContent = 'تم النسخ!';
+            setTimeout(() => { span.textContent = 'نسخ'; }, 1800);
+        }
+    </script>
+</body>
+</html>
